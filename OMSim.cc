@@ -98,10 +98,52 @@ int OMSim()
 
 	double startingtime = clock() / CLOCKS_PER_SEC;
 
+
+
+	G4double Z0 = detector->mPMTManager->GetDistancePMTCenterToPMTtip();
+
+
+	std::vector<G4PV2DDataVector> data = detector->mData->loadtxt("x_y_mapping_4inch", false);
+	std::vector<G4double> dista = data.at(1);
+	std::vector<G4double> r = data.at(0);
+
+	double max_distance = *std::max_element(dista.begin(), dista.end());
+
+	for (auto& value : dista) {
+		value = (max_distance - value);
+	}
+
+	int n = r.size();
+	TGraph *gr = new TGraph(n, &r[0], &dista[0]);
+	G4int lRmax = 53;
+	for (int xx=-lRmax; xx<lRmax+1;xx++){
+
+        for (int yy=-lRmax; yy<lRmax+1;yy++){
+
+            if( (std::sqrt(xx*xx+yy*yy) < lRmax) ){
+
+	G4double zCorr = gr->Eval(std::sqrt(xx*xx+yy*yy))*mm;
+	if (zCorr>60*mm){
+		zCorr = 60*mm;
+	}
 	lUIinterface.applyCommand("/gps/particle opticalphoton");
 	lUIinterface.applyCommand("/gps/energy", 1239.84193 / OMSimCommandArgsTable::getInstance().get<G4double>("wavelength"),"eV");
-	lUIinterface.applyCommand("/control/execute QE_matching.gps");
+	lUIinterface.applyCommand("/control/execute OMSim_xyz.gps");
+	lUIinterface.applyCommand("/gps/pos/centre", xx, yy, Z0+2-zCorr, "mm");
 	lUIinterface.runBeamOn();
+	std::string lFileName = "LOMScan/" + std::to_string(xx) + "_" + std::to_string(yy) + ".txt";
+	OMSimAnalysisManager& lAnalysisManager = OMSimAnalysisManager::getInstance();
+	lAnalysisManager.datafile.open(lFileName.c_str(), std::ios::out|std::ios::app);
+	lAnalysisManager.datafile << std::fixed << std::setprecision(3) << xx << "\t" << yy << "\t" << Z0+2-zCorr << "\t" << OMSimCommandArgsTable::getInstance().get<G4double>("wavelength") << "\n" ;	
+
+	lAnalysisManager.Write();
+	// 	Close output data file
+	lAnalysisManager.datafile.close();
+	lAnalysisManager.Reset();
+
+			}
+		}
+	}
 	//detector->mMDOM->setNavigator(navigator);
 	//detector->mMDOM->runBeamOnFlasher(1, 9);
 

@@ -113,7 +113,7 @@ void abcMaterialData::extractAbsorptionLength()
     if (mObjectName=="RiAbs_Photocathode"){
         for (int i = 0; i < static_cast<int>(lAbsLength.size()); i++)
         {
-            lAbsLength[i] = lAbsLengthArg*mm;
+            lAbsLength[i] = lAbsLengthArg*nm;
         }
     }
     sortVectorByReference(lAbsLengthEnergy, lAbsLength);

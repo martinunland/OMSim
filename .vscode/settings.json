@@ -83,6 +83,7 @@
         "netfwd": "cpp",
         "span": "cpp",
         "ntuple": "cpp",
-        "bmf": "cpp"
+        "bmf": "cpp",
+        "colorf": "cpp"
     }
 }

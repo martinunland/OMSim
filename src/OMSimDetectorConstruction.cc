@@ -96,11 +96,11 @@ G4VPhysicalVolume *OMSimDetectorConstruction::Construct()
         }
         case 1: {
             log_info("Constructing single PMT");
-            OMSimPMTConstruction* lPMTManager = new OMSimPMTConstruction(mData);
+            mPMTManager  = new OMSimPMTConstruction(mData);
 
-            lPMTManager->SelectPMT("argPMT");
-            lPMTManager->construction();
-            lPMTManager->placeIt(G4ThreeVector(0, 0, 0), G4RotationMatrix(), mWorldLogical, "_0");
+            mPMTManager->SelectPMT("argPMT");
+            mPMTManager->construction();
+            mPMTManager->placeIt(G4ThreeVector(0, 0, 0), G4RotationMatrix(), mWorldLogical, "_0");
             break;
         }
         case 2: {

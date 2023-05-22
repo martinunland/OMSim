@@ -8,16 +8,16 @@
 void OMSimAnalysisManager::Write()
 {	
 	for (int i = 0; i < (int) stats_event_id.size(); i++) {
-		datafile << stats_event_id.at(i) << "\t";
+		//datafile << stats_event_id.at(i) << "\t";
 		//datafile << stats_hit_time.at(i) << "\t";
-		datafile << stats_photon_flight_time.at(i) << "\t";
+		//datafile << stats_photon_flight_time.at(i) << "\t";
 		//datafile << stats_photon_track_length.at(i) << "\t";
-		datafile << stats_photon_energy.at(i) << "\t";
+		//datafile << stats_photon_energy.at(i) << "\t";
 		//datafile << stats_PMT_hit.at(i) << "\t";
 		//datafile << stats_event_distance.at(i) << "\t";
-		datafile << lPulses.at(i).DetectionProbability << "\t";
-		datafile << lPulses.at(i).TransitTime << "\t";
-		datafile << lPulses.at(i).PE << "\t";
+		//datafile << lPulses.at(i).DetectionProbability << "\t";
+		//datafile << lPulses.at(i).TransitTime << "\t";
+		//datafile << lPulses.at(i).PE << "\t";
 		datafile << stats_photon_position.at(i).x()/m << "\t";
 		datafile << stats_photon_position.at(i).y()/m << "\t";
 		datafile << stats_photon_position.at(i).z()/m << "\t";

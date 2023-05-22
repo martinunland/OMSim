@@ -16,13 +16,14 @@ public:
     G4VPhysicalVolume *Construct();
     G4VPhysicalVolume *mWorldPhysical;
     mDOM *mMDOM;
-
+    OMSimPMTConstruction* mPMTManager;
+    InputDataManager *mData;
 private:
     G4Orb *mWorldSolid;
     G4LogicalVolume *mWorldLogical;
 
     void constructWorld();
-    InputDataManager *mData;
+    
 };
 
 #endif
