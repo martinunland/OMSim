@@ -70,12 +70,12 @@ void OMSimTrackingAction::PostUserTrackingAction(const G4Track* aTrack)
         G4double h = 4.135667696E-15*eV*s;
         G4double c = 2.99792458E17*nm/s;
 
-        std::vector<G4String> n = explode(aTrack->GetStep()->GetPreStepPoint()->GetTouchableHandle()->GetVolume(2)->GetName(),'_');
+        //std::vector<G4String> n = explode(aTrack->GetStep()->GetPreStepPoint()->GetTouchableHandle()->GetVolume(2)->GetName(),'_');
 
-        OMSimPMTResponse& lPhotocathodeResponse = OMSimPMTResponse::getInstance();
+        //OMSimPMTResponse& lPhotocathodeResponse = OMSimPMTResponse::getInstance();
 	    OMSimAnalysisManager& lAnalysisManager = OMSimAnalysisManager::getInstance();
 
-        lAnalysisManager.stats_PMT_hit.push_back(atoi(n.at(1)));	
+        lAnalysisManager.stats_PMT_hit.push_back(0);//atoi(n.at(1)));	
         G4ThreeVector lGlobalPosition = aTrack->GetPosition();
         G4ThreeVector lLocalPosition = aTrack->GetStep()->GetPostStepPoint()->GetTouchableHandle()->GetHistory()->GetTopTransform().TransformPoint(lGlobalPosition);
 
@@ -83,7 +83,7 @@ void OMSimTrackingAction::PostUserTrackingAction(const G4Track* aTrack)
         G4double y = lLocalPosition.y()/mm;
         G4double lR = std::sqrt(x*x+y*y);
 
-        lAnalysisManager.lPulses.push_back(lPhotocathodeResponse.ProcessPhotocathodeHit(x, y, h*c/lEkin));
+        //lAnalysisManager.lPulses.push_back(lPhotocathodeResponse.ProcessPhotocathodeHit(x, y, h*c/lEkin));
 
             G4ThreeVector lDeltaPos = aTrack->GetVertexPosition() - lGlobalPosition;
             lAnalysisManager.stats_photon_direction.push_back(aTrack->GetMomentumDirection());

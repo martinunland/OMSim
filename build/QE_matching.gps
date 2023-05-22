@@ -1,0 +1,16 @@
+
+/gps/pos/type Plane
+/gps/pos/shape Circle
+/gps/pos/centre 0 0 30 cm
+
+/gps/pos/radius 40 mm # for 17" sphere 
+
+/gps/pos/rot1 0 1 0
+/gps/ang/rot1 0 1 0
+
+/gps/pos/rot2 -1 0 0
+/gps/ang/rot2 -1 0 0
+
+/gps/ang/type beam2d
+/gps/ang/sigma_x 0
+/gps/ang/sigma_y 0

@@ -98,6 +98,10 @@ int OMSim()
 
 	double startingtime = clock() / CLOCKS_PER_SEC;
 
+	lUIinterface.applyCommand("/gps/particle opticalphoton");
+	lUIinterface.applyCommand("/gps/energy", 1239.84193 / OMSimCommandArgsTable::getInstance().get<G4double>("wavelength"),"eV");
+	lUIinterface.applyCommand("/control/execute QE_matching.gps");
+	lUIinterface.runBeamOn();
 	//detector->mMDOM->setNavigator(navigator);
 	//detector->mMDOM->runBeamOnFlasher(1, 9);
 
@@ -144,7 +148,8 @@ int main(int argc, char *argv[])
 		("output_file", po::value<std::string>()->default_value("mdom_testoutput.txt"), "filename for output")
 		("reflective_surface", po::value<G4int>()->default_value(0), "index to select reflective surface type [Refl_V95Gel = 0, Refl_V98Gel = 1, Refl_Aluminium = 2, Refl_Total98 = 3]")
 		("visual,v", po::bool_switch(), "shows visualization of module after run")
-		("pmt_model", po::value<G4int>()->default_value(0), "R15458 (mDOM) = 0,  R7081 (DOM) = 1, 4inch (LOM) = 2, R5912_20_100 (D-Egg)= 3");
+		("pmt_model", po::value<G4int>()->default_value(0), "R15458 (mDOM) = 0,  R7081 (DOM) = 1, 4inch (LOM) = 2, R5912_20_100 (D-Egg)= 3")
+		("abs_length", po::value<G4double>()->default_value(1), "Abs length of photocathode");
 		po::variables_map lVariablesMap;
 		po::store(po::parse_command_line(argc, argv, desc), lVariablesMap);
 		po::notify(lVariablesMap);

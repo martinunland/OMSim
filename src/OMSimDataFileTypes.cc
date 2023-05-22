@@ -13,6 +13,7 @@
 #include <cmath>
 #include <numeric>
 #include <G4OpBoundaryProcess.hh>
+#include "OMSimCommandArgsTable.hh"
 namespace pt = boost::property_tree;
 /*
  * %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -107,6 +108,14 @@ void abcMaterialData::extractAbsorptionLength()
     std::vector<G4double> lAbsLengthEnergy;
     mFileData->parseKeyContentToVector(lAbsLength, mJsonTree, "jAbsLength", 1 * mm, false);
     mFileData->parseKeyContentToVector(lAbsLengthEnergy, mJsonTree, "jAbsLengthWavelength", mHC_eVnm, true);
+
+    G4double lAbsLengthArg = OMSimCommandArgsTable::getInstance().get<G4double>("abs_length");
+    if (mObjectName=="RiAbs_Photocathode"){
+        for (int i = 0; i < static_cast<int>(lAbsLength.size()); i++)
+        {
+            lAbsLength[i] = lAbsLengthArg*mm;
+        }
+    }
     sortVectorByReference(lAbsLengthEnergy, lAbsLength);
     mMPT->AddProperty("ABSLENGTH", &lAbsLengthEnergy[0], &lAbsLength[0], static_cast<int>(lAbsLength.size()));
 }

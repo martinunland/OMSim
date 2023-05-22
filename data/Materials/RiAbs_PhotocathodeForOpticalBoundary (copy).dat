@@ -1,5 +1,5 @@
 {
-   "jName": "RiAbs_Photocathode-",
+   "jName": "RiAbs_Photocathode",
    "jDataType": "RiAbs",
    "jComponentName": [
       "G4_Sb",
@@ -177,13 +177,11 @@
       680.50158
    ],
     "jAbsLength": [
-    1, 1
+1,
+1
    ],
    "jAbsLengthWavelength": [
         250,
         750
    ]
 }
-
-
-
