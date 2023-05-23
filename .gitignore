@@ -32,5 +32,5 @@
 *.app
 
 
-#build/DOMScan/
+build/DEGGScan/
 build/*.tar
