@@ -60,7 +60,6 @@ void OMSimPMTConstruction::construction()
 
     //Logicals
     G4LogicalVolume* lPMTlogical = new G4LogicalVolume(lPMTSolid, mData->getMaterial("RiAbs_Glass_Tube"), "PMT tube logical");
-    //G4LogicalVolume* lPMTlogical = new G4LogicalVolume(lPMTSolid, mData->GetMaterial("Ri_Glass_Tube"), "PMT tube logical");
     G4LogicalVolume* lTubeVacuum = new G4LogicalVolume(lGlassInside, mData->getMaterial("Ri_Vacuum"), "PMTvacuum");
 
     G4SubtractionSolid* lVacuumPhotocathodeSolidNew = PhotocathodeLayerConstruction();
@@ -140,15 +139,13 @@ std::tuple<G4VSolid*, G4VSolid*> OMSimPMTConstruction::GetBulbSolid(G4String pSi
 {
     G4SubtractionSolid* lVacuumPhotocathodeSolid;
     G4String lBulbBackShape = mData->getValue<G4String>(mSelectedPMT, "jBulbBackShape");
-    return BulbConstructionFull(pSide);
-    // if (lBulbBackShape == "Simple") mSimpleBulb = true;
-
-    // if (mSimpleBulb || !mInternalReflections)
-    // {
+    return BulbConstructionSimple(pSide);
+    // if (lBulbBackShape == "Simple") 
+    // {   log_critical("Simple bulb construction");
     //     return BulbConstructionSimple(pSide);
     // }
     // else
-    // {
+    // {   log_critical("Full bulb construction");
     //     return BulbConstructionFull(pSide);
     // }
 }
@@ -217,8 +214,9 @@ std::tuple<G4VSolid*, G4VSolid*> OMSimPMTConstruction::BulbConstructionFull(G4St
 
     G4SubtractionSolid* lBulbBack = new G4SubtractionSolid("Solid back of PMT", lSubstractionTube, lCone, 0, G4ThreeVector(0, 0, lConeEllipse_y - lSTubeEllipse_y));
     lBulbBack = new G4SubtractionSolid("Solid back of PMT", lBulbBack, lTorusTubeEdge, 0, G4ThreeVector(0, 0, lTorusToEllipse - lSTubeEllipse_y));
-
+    lBulbSolid = new G4UnionSolid("Bulb tube solid", lBulbSolidSubstractions, lBulbBack, 0, G4ThreeVector(0, 0, lSTubeEllipse_y));
     lBulbSolid = new G4UnionSolid("Bulb tube solid", lBulbSolid, lBulkSolid, 0, G4ThreeVector(0, 0, -mMissingTubeLength));
+
 
     return std::make_tuple(lBulbSolid, lPhotocathodeSide);
 }
@@ -287,7 +285,7 @@ void OMSimPMTConstruction::DynodeSystemConstructionCAD(G4LogicalVolume* pMother)
     G4Tubs* lShieldSolid = new G4Tubs("Shield solid", 0, 0.5*mTubeWidth - 0.05 * mm, 0.05 * mm / 2, 0, 2 * CLHEP::pi);
     G4LogicalVolume* lShieldLogical = new G4LogicalVolume(lShieldSolid, mData->getMaterial("NoOptic_Absorber"), "logical", 0, 0, 0); 
     lShieldLogical->SetVisAttributes(mAbsorberVis);
-    new G4PVPlacement(lRot, G4ThreeVector(0, 0, -0.6*2*mMissingTubeLength), lShieldLogical, "BackShield", pMother, false, 0, mCheckOverlaps);
+    new G4PVPlacement(lRot, G4ThreeVector(0, 0, -0.8*2*mMissingTubeLength), lShieldLogical, "BackShield", pMother, false, 0, mCheckOverlaps);
 }
 
 

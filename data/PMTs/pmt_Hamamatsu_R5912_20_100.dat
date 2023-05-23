@@ -1,13 +1,13 @@
 {
    "jName": "pmt_Hamamatsu_R5912_20_100",
    "jFrontalShape": "SingleEllipse",
-   "jBulbBackShape": "jFullFit",
+   "jBulbBackShape": "Simple",
    "jDynodeCADOffset": {
-      "jValue": 220,
+      "jValue": 230,
       "jUnit": "mm"
    },
    "jDynodeCADscale": {
-      "jValue": 1.5,
+      "jValue": 1.65,
       "jUnit": "NULL"
    },
    "jOuterShape": {
@@ -44,31 +44,31 @@
          "jUnit": "mm"
       },
       "jLineFitSlope": {
-         "jValue": 0.5612119788339285,
+         "jValue": 0.5757608609007381,
          "jUnit": "mm"
       },
       "jEllipseConeTransition_x": {
-         "jValue": 76.29940680896881,
+         "jValue": 76.93973539386364,
          "jUnit": "mm"
       },
       "jEllipseConeTransition_y": {
-         "jValue": 55.014066745801074,
+         "jValue": 55.545154559626006,
          "jUnit": "mm"
       },
       "jConeTorusTransition_x": {
-         "jValue": 49.33533533533534,
+         "jValue": 47.525525525525524,
          "jUnit": "mm"
       },
       "jTorusCircleR": {
-         "jValue": 13.755519688374875,
+         "jValue": 19.83644032798383,
          "jUnit": "mm"
       },
       "jTorusCirclePos_x": {
-         "jValue": 56.794263138114964,
+         "jValue": 62.19968173089496,
          "jUnit": "mm"
       },
       "jTorusCirclePos_y": {
-         "jValue": 28.323749092088605,
+         "jValue": 25.26244568716455,
          "jUnit": "mm"
       },
       "jTorusTubeTransition_y": {
@@ -133,38 +133,6 @@
       },
       "jEllipsePos_y": {
          "jValue": 104.3145232560131,
-         "jUnit": "mm"
-      },
-      "jLineFitSlope": {
-         "jValue": 0.5612119788339285,
-         "jUnit": "mm"
-      },
-      "jEllipseConeTransition_x": {
-         "jValue": 77.06076151315169,
-         "jUnit": "mm"
-      },
-      "jEllipseConeTransition_y": {
-         "jValue": 56.95759969500052,
-         "jUnit": "mm"
-      },
-      "jConeTorusTransition_x": {
-         "jValue": 47.72272272272272,
-         "jUnit": "mm"
-      },
-      "jTorusCircleR": {
-         "jValue": 16.79186020549729,
-         "jUnit": "mm"
-      },
-      "jTorusCirclePos_x": {
-         "jValue": 57.692866421639806,
-         "jUnit": "mm"
-      },
-      "jTorusCirclePos_y": {
-         "jValue": 27.206181754687773,
-         "jUnit": "mm"
-      },
-      "jTorusTubeTransition_y": {
-         "jValue": 27,
          "jUnit": "mm"
       }
    }

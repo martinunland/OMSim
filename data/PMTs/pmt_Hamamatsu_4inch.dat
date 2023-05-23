@@ -3,7 +3,7 @@
    "jFrontalShape": "SphereEllipse",
    "jBulbBackShape": "jFullFit",
    "jDynodeCADOffset": {
-      "jValue": 108,
+      "jValue": 99,
       "jUnit": "mm"
    },
    "jDynodeCADscale": {
@@ -136,19 +136,19 @@
          "jUnit": "mm"
       },
       "jLineFitSlope": {
-         "jValue": 0.7879208794591716,
+         "jValue": 0.7842316892168611,
          "jUnit": "mm"
       },
       "jEllipseConeTransition_x": {
-         "jValue": 39.14052061105145,
+         "jValue": 39.31787801422035,
          "jUnit": "mm"
       },
       "jEllipseConeTransition_y": {
-         "jValue": 25.44212584910869,
+         "jValue": 25.551950874506325,
          "jUnit": "mm"
       },
       "jConeTorusTransition_x": {
-         "jValue": 29.24024024024024,
+         "jValue": 29.216216216216218,
          "jUnit": "mm"
       },
       "jTorusCircleR": {
