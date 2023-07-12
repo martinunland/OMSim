@@ -42,6 +42,13 @@
 
 namespace po = boost::program_options;
 
+std::vector<int> arange(int start, int stop, int step) {
+    std::vector<int> values;
+    for (int value = start; value < stop; value += step) {
+        values.push_back(value);
+    }
+    return values;
+}
 
 int OMSim()
 {
@@ -98,57 +105,65 @@ int OMSim()
 
 	double startingtime = clock() / CLOCKS_PER_SEC;
 
+	G4double lDistance = lArgs.get<G4double>("dist");
+	G4double cos_phi, sin_phi, cos_theta, sin_theta, rho, posX, posY, posZ;
 
 
-	G4double Z0 = detector->mPMTManager->GetDistancePMTCenterToPMTtip();
+	std::vector<G4PV2DDataVector> data = detector->mData->loadtxt("theta_phi.txt", false);
+	std::vector<G4double> lThetas = data.at(0);
+	std::vector<G4double> lPhis = data.at(1);
 
+	std::vector<int> lWavelengths;
+	lWavelengths.push_back(400);
+	//arange(250, 710, 10);
+	for (const auto& lWavelength : lWavelengths) {
+	for(std::vector<int>::size_type i = 0; i != lThetas.size(); i++) { 
+	G4double lPhi = lThetas.at(i);//lArgs.get<G4double>("phi");
+	G4double lTheta = lPhis.at(i);//lArgs.get<G4double>("theta");
+	cos_phi = cos(lPhi*deg);
+	sin_phi = sin(lPhi*deg);
+	cos_theta = cos(lTheta*deg);
+	sin_theta = sin(lTheta*deg);
 
-	std::vector<G4PV2DDataVector> data = detector->mData->loadtxt("x_y_mapping_DOM", false);
-	std::vector<G4double> dista = data.at(1);
-	std::vector<G4double> r = data.at(0);
+	rho = lDistance*sin_theta;
+	posX = rho*cos_phi;
+	posY = rho*sin_phi;
+	posZ = lDistance*cos_theta;
 
-	double max_distance = *std::max_element(dista.begin(), dista.end());
+	lUIinterface.applyCommand("/control/execute OMSim.gps");
 
-	for (auto& value : dista) {
-		value = (max_distance - value);
-	}
+	//lUIinterface.applyCommand("/gps/particle opticalphoton");
+	lUIinterface.applyCommand("/gps/energy", 1239.84193 / lWavelength,"eV");
 
-	int n = r.size();
-	TGraph *gr = new TGraph(n, &r[0], &dista[0]);
-	G4int lRmax = 130;
-	G4double zCorr;
-	for (int xx=-lRmax; xx<lRmax+1;xx++){
-
-        for (int yy=-lRmax; yy<lRmax+1;yy++){
-
-            if( (std::sqrt(xx*xx+yy*yy) < lRmax+1) ){
-
-	zCorr = gr->Eval(std::sqrt(xx*xx+yy*yy))*mm;
-
-	if (zCorr>60*mm){
-		zCorr = 60*mm;
-	}
-	
-	lUIinterface.applyCommand("/gps/particle opticalphoton");
-	lUIinterface.applyCommand("/gps/energy", 1239.84193 / OMSimCommandArgsTable::getInstance().get<G4double>("wavelength"),"eV");
-	lUIinterface.applyCommand("/control/execute OMSim_xyz.gps");
-	lUIinterface.applyCommand("/gps/pos/centre", xx, yy, Z0+2-zCorr, "mm");
-	
+	//lUIinterface.applyCommand("/gps/pos/type Plane");
+	//lUIinterface.applyCommand("/gps/pos/shape Circle");
+	lUIinterface.applyCommand("/gps/pos/centre", posX, posY, posZ, "mm");
+	lUIinterface.applyCommand("/gps/pos/radius", lArgs.get<G4double>("diam")*0.5, "mm");
+	double x,y,z; // vector entries for plane positioning
+	x = -sin_phi;	// d/dphi of positionVector (original divided by sin_theta, because length one not needed)
+	y = cos_phi; 
+	z = 0;
+	lUIinterface.applyCommand("/gps/pos/rot1", x,y,z);
+	lUIinterface.applyCommand("/gps/ang/rot1", x,y,z);
+	x = -cos_phi * cos_theta;	// -d/dtheta of positionVector (divided by sin_theta, because length one not needed)
+	y = -sin_phi * cos_theta;
+	z = sin_theta;
+	lUIinterface.applyCommand("/gps/pos/rot2", x,y,z);
+	lUIinterface.applyCommand("/gps/ang/rot2", x,y,z);
 	lUIinterface.runBeamOn();
-	std::string lFileName = "DOMSCan/" + std::to_string(xx) + "_" + std::to_string(yy) + ".txt";
+
+	std::string lFileName = lArgs.get<std::string>("output_file") + ".txt";
 	OMSimAnalysisManager& lAnalysisManager = OMSimAnalysisManager::getInstance();
 	lAnalysisManager.datafile.open(lFileName.c_str(), std::ios::out|std::ios::app);
-	lAnalysisManager.datafile << std::fixed << std::setprecision(3) << xx << "\t" << yy << "\t" << Z0+2-zCorr << "\t" << OMSimCommandArgsTable::getInstance().get<G4double>("wavelength") << "\n" ;	
+	lAnalysisManager.datafile << std::fixed << std::setprecision(3) << lPhi << "\t" << lTheta << "\t" <<  lArgs.get<G4double>("diam") << "\t" << lWavelength << "\t" << OMSimCommandArgsTable::getInstance().get<G4int>("numevents") <<"\t" ;	
 
-	lAnalysisManager.Write();
+	lAnalysisManager.WriteAccept();
 	// 	Close output data file
 	lAnalysisManager.datafile.close();
 	lAnalysisManager.Reset();
 
-			}
-		}
 	}
-
+	}
 	//detector->mMDOM->setNavigator(navigator);
 	//detector->mMDOM->runBeamOnFlasher(1, 9);
 
@@ -196,7 +211,8 @@ int main(int argc, char *argv[])
 		("reflective_surface", po::value<G4int>()->default_value(0), "index to select reflective surface type [Refl_V95Gel = 0, Refl_V98Gel = 1, Refl_Aluminium = 2, Refl_Total98 = 3]")
 		("visual,v", po::bool_switch(), "shows visualization of module after run")
 		("pmt_model", po::value<G4int>()->default_value(0), "R15458 (mDOM) = 0,  R7081 (DOM) = 1, 4inch (LOM) = 2, R5912_20_100 (D-Egg)= 3")
-		("abs_length", po::value<G4double>()->default_value(1), "Abs length of photocathode");
+		("abs_length", po::value<G4double>()->default_value(1), "Abs length of photocathode")
+		("string_pos_angle", po::value<G4double>()->default_value(45), "Polar angle of main data cable (viewed from above)");
 		po::variables_map lVariablesMap;
 		po::store(po::parse_command_line(argc, argv, desc), lVariablesMap);
 		po::notify(lVariablesMap);

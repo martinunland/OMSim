@@ -55,7 +55,7 @@ void OMSimAnalysisManager::WriteAccept()
 	}
 	// wrinting collective hits
 	for (int j = 0; j < num_pmts; j++) {
-		datafile << "\t" << pmthits[j];
+		//datafile << "\t" << pmthits[j];
 		sum += pmthits[j];
 		pmthits[j] = 0;
 	}

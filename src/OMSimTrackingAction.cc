@@ -14,29 +14,7 @@
 #include "G4OpticalParameters.hh"
 #include "G4MaterialPropertyVector.hh"
 
-std::vector<G4String> explode(G4String s, char d) {
-	std::vector<G4String> o;
-	int i,j;
-	i = s.find_first_of("#");
-	if (i == 0) return o;
- 	while (s.size() > 0) {
-		i = s.find_first_of(d);
-		j = s.find_last_of(d);
-		o.push_back(s.substr(0, i));
-		if (i == j) {
-			o.push_back(s.substr(j+1));
-			break;
-		}
-		s.erase(0,i+1);
- 	}
-	return o;// o beinhaltet s ohne d
-}
 
-std::vector<G4String> explode(char* cs, char d) {
-	std::vector<G4String> o;
-	G4String s = cs;
-	return explode(s,d);
-}
 
 OMSimTrackingAction::OMSimTrackingAction()
 :G4UserTrackingAction()
@@ -52,30 +30,30 @@ void OMSimTrackingAction::PreUserTrackingAction(const G4Track* aTrack)
 }
 
 void OMSimTrackingAction::PostUserTrackingAction(const G4Track* aTrack)
-{
+{   /*
     if ( aTrack->GetDefinition()->GetParticleName() == "opticalphoton" ) {
 
         if ((aTrack->GetVolume()->GetName()).substr(0,12) == "Photocathode"){
 
-        /*
+        //
         size_t idx_rindex1        = 0;
         const G4Material* aMaterial = aTrack->GetMaterial();
         G4MaterialPropertiesTable* aMaterialPropertiesTable = aMaterial->GetMaterialPropertiesTable();
 
         G4MaterialPropertyVector* RindexMPV = aMaterialPropertiesTable->GetProperty(kRINDEX);
         G4cout << RindexMPV->Value( aTrack->GetDynamicParticle()->GetTotalMomentum(), idx_rindex1)<< G4endl;
-        */
+        //
         G4double lEkin = aTrack->GetKineticEnergy();
 
         G4double h = 4.135667696E-15*eV*s;
         G4double c = 2.99792458E17*nm/s;
 
-        //std::vector<G4String> n = explode(aTrack->GetStep()->GetPreStepPoint()->GetTouchableHandle()->GetVolume(2)->GetName(),'_');
+        std::vector<G4String> n = explode(aTrack->GetStep()->GetPreStepPoint()->GetTouchableHandle()->GetVolume(2)->GetName(),'_');
 
         //OMSimPMTResponse& lPhotocathodeResponse = OMSimPMTResponse::getInstance();
 	    OMSimAnalysisManager& lAnalysisManager = OMSimAnalysisManager::getInstance();
 
-        lAnalysisManager.stats_PMT_hit.push_back(0);//atoi(n.at(1)));	
+        lAnalysisManager.stats_PMT_hit.push_back(atoi(n.at(1)));	
         G4ThreeVector lGlobalPosition = aTrack->GetPosition();
         G4ThreeVector lLocalPosition = aTrack->GetStep()->GetPostStepPoint()->GetTouchableHandle()->GetHistory()->GetTopTransform().TransformPoint(lGlobalPosition);
 
@@ -96,6 +74,9 @@ void OMSimTrackingAction::PostUserTrackingAction(const G4Track* aTrack)
             lAnalysisManager.stats_event_distance.push_back(lDeltaPos.mag()/m);
     }
     }
+
+
+    */
 }
 
                 

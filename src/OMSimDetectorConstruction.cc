@@ -72,14 +72,14 @@ G4VPhysicalVolume *OMSimDetectorConstruction::Construct()
 
     
     
-    G4Box* Photocathode = new G4Box("Photocathode", 20*cm, 20*cm, 10*nm);
-    G4Box* Glass = new G4Box("Glass", 20*cm, 20*cm, 1*mm);
-    G4Box* Vacuum = new G4Box("Vacuum", 20*cm, 20*cm, 1*cm);
+    // G4Box* Photocathode = new G4Box("Photocathode", 20*cm, 20*cm, 10*nm);
+    // G4Box* Glass = new G4Box("Glass", 20*cm, 20*cm, 1*mm);
+    // G4Box* Vacuum = new G4Box("Vacuum", 20*cm, 20*cm, 1*cm);
 
     
-    G4LogicalVolume* PhotocathodeLog = new G4LogicalVolume(Photocathode, mData->getMaterial("RiAbs_Photocathode"), "Photocathode");
-    G4LogicalVolume* GlassLog = new G4LogicalVolume(Glass, mData->getMaterial("RiAbs_Glass_Tube"), "PMTGlass");
-    G4LogicalVolume* VacuumLog = new G4LogicalVolume(Vacuum, mData->getMaterial("Ri_Vacuum"), "PMTvacuum");
+    // G4LogicalVolume* PhotocathodeLog = new G4LogicalVolume(Photocathode, mData->getMaterial("RiAbs_Photocathode"), "Photocathode");
+    // G4LogicalVolume* GlassLog = new G4LogicalVolume(Glass, mData->getMaterial("RiAbs_Glass_Tube"), "PMTGlass");
+    // G4LogicalVolume* VacuumLog = new G4LogicalVolume(Vacuum, mData->getMaterial("Ri_Vacuum"), "PMTvacuum");
 
     
     //new G4PVPlacement(0, G4ThreeVector(0, 0, 0), GlassLog, "PMTGlass", mWorldLogical, false, 0, true);
@@ -111,7 +111,7 @@ G4VPhysicalVolume *OMSimDetectorConstruction::Construct()
         }
         case 3: {
             log_info("Constructing PDOM");
-            pDOM *lOpticalModule = new pDOM(mData);
+            pDOM *lOpticalModule = new pDOM(mData, false);
             lOpticalModule->placeIt(G4ThreeVector(0, 0, 0), G4RotationMatrix(), mWorldLogical, "");
             break;
         }

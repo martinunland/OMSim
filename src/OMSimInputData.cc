@@ -255,6 +255,7 @@ G4OpticalSurface *InputDataManager::getOpticalSurface(G4String pName)
  */
 void InputDataManager::searchFolders()
 {
+    log_debug("Searching for data files...");
     std::vector<std::string> directories = {
         "../data/Materials",
         "../data/PMTs",

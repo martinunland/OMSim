@@ -59,12 +59,12 @@ void OMSimPMTConstruction::construction()
 
 
     //Logicals
-    G4LogicalVolume* lPMTlogical = new G4LogicalVolume(lPMTSolid, mData->getMaterial("RiAbs_Glass_Tube"), "PMT tube logical");
+    G4LogicalVolume* lPMTlogical = new G4LogicalVolume(lPMTSolid, mData->getMaterial("Ri_Glass_Tube"), "PMT tube logical");
     G4LogicalVolume* lTubeVacuum = new G4LogicalVolume(lGlassInside, mData->getMaterial("Ri_Vacuum"), "PMTvacuum");
 
     G4SubtractionSolid* lVacuumPhotocathodeSolidNew = PhotocathodeLayerConstruction();
 
-    G4LogicalVolume* lPhotocathode = new G4LogicalVolume(lVacuumPhotocathodeSolidNew, mData->getMaterial("RiAbs_Photocathode"), "Photocathode");
+    G4LogicalVolume* lPhotocathode = new G4LogicalVolume(lVacuumPhotocathodeSolid, mData->getMaterial("RiAbs_Photocathode"), "Photocathode");
     G4LogicalVolume* lVacuumBackLogical = new G4LogicalVolume(lVacuumBack, mData->getMaterial("Ri_Vacuum"), "PMTvacuum");
     
 
@@ -75,7 +75,7 @@ void OMSimPMTConstruction::construction()
     appendComponent(lPMTSolid, lPMTlogical, G4ThreeVector(0, 0, 0), G4RotationMatrix(), "PMT");
 
     if (mHACoatingBool) AppendHACoating();
-    //CathodeBackShield(lVacuumBackLogical);
+    CathodeBackShield(lVacuumBackLogical);
     DynodeSystemConstructionCAD(lVacuumBackLogical);
 
 
@@ -488,7 +488,7 @@ void OMSimPMTConstruction::SelectPMT(G4String pPMTtoSelect)
         pPMTtoSelect = lPMTTypes[OMSimCommandArgsTable::getInstance().get<G4int>("pmt_model")];
     }
     mSelectedPMT = pPMTtoSelect;
-
+    G4cout << mSelectedPMT << G4endl;
     //Check if requested PMT is in the table of PMTs
     if (mData->checkIfKeyInTable(pPMTtoSelect))
     {//if found

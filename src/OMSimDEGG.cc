@@ -47,7 +47,9 @@ DEgg::DEgg(InputDataManager* pData, G4bool pPlaceHarness) {
    mData = pData;
    mPMTManager = new OMSimPMTConstruction(mData);
    mPMTManager->SelectPMT("pmt_Hamamatsu_R5912_20_100");
+   mPMTManager->SimulateHACoating();
    mPMTManager->construction();
+   
    construction(); // always before harness, otherwise harness will be deleted :(
 /*
    if (pPlaceHarness) {
@@ -115,7 +117,7 @@ void DEgg::construction()
    //appendInternalComponentsFromCAD();
 
    //Logicals
-   G4LogicalVolume* lDEggGlassLogical = new G4LogicalVolume(lOuterGlass, mData->getMaterial("RiAbs_Glass_Okamoto_DOUMEKI"), "Glass_phys");
+   G4LogicalVolume* lDEggGlassLogical = new G4LogicalVolume(lOuterGlass, mData->getMaterial("RiAbs_Glass_Chiba"), "Glass_phys");
    G4LogicalVolume* lInnerVolumeLogical = new G4LogicalVolume(lInternalVolume, mData->getMaterial("Ri_Air"), "InnerVolume");
 
    //Placements
@@ -213,14 +215,13 @@ void DEgg::appendPressureVesselFromCAD()
    // Place all of the meshes it can find in the file as solids individually.
    G4UnionSolid* lPressureVessel = new G4UnionSolid("CADPV", lMesh->GetSolids().at(0), lMesh->GetSolids().at(0), lRot, G4ThreeVector(0, -2*111*mm, 0));
 
-    G4LogicalVolume* lSupportStructureLogical = new G4LogicalVolume(lPressureVessel, mData->getMaterial("RiAbs_Glass_Okamoto_DOUMEKI"), "PressureVessel");
-    lSupportStructureLogical->SetVisAttributes(mAluVis);
+    G4LogicalVolume* lPressureVesselLogical = new G4LogicalVolume(lPressureVessel, mData->getMaterial("RiAbs_Glass_Chiba"), "PressureVessel");
 
    G4RotationMatrix lRotNP = G4RotationMatrix();
    lRotNP.rotateX(90*deg);
-   lSupportStructureLogical->SetVisAttributes(mGlassVis);
+   lPressureVesselLogical->SetVisAttributes(mGlassVis);
    
-   appendComponent(lPressureVessel, lSupportStructureLogical, G4ThreeVector(0, 0, 111*mm), lRotNP, "PressureVessel");
+   appendComponent(lPressureVessel, lPressureVesselLogical, G4ThreeVector(0, 0, 111*mm), lRotNP, "PressureVessel");
    
 }
 

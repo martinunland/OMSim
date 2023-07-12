@@ -113,7 +113,7 @@ void LOM16::construction()
     placeGelpads(lInnerVolumeLogical);
 
     appendComponent(lGlassSolid, lGlassLogical, G4ThreeVector(0, 0, 0), G4RotationMatrix(), "PressureVessel");
-    appendEquatorBand();
+    //appendEquatorBand();
     
     // ---------------- visualisation attributes --------------------------------------------------------------------------------
     lGlassLogical->SetVisAttributes(mGlassVis);
