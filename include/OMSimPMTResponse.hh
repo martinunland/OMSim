@@ -8,6 +8,8 @@
 #include <TGraph.h>
 #include <TGraph2D.h>
 
+#include "interpolation.h" //alglib
+
 class OMSimPMTResponse
 {
 public:
@@ -37,10 +39,17 @@ private:
 
     TGraph2D* scan;
     TGraph* mRelativeDetectionEfficiencyInterp;
-    std::map<G4double, TGraph2D*> mGainG2Dmap;
-    std::map<G4double, TGraph2D*> mGainResolutionG2Dmap;
-    std::map<G4double, TGraph2D*> mTransitTimeG2Dmap;
-    std::map<G4double, TGraph2D*> mTransitTimeSpreadG2Dmap;
+    // std::map<G4double, TGraph2D*> mGainG2Dmap;
+    // std::map<G4double, TGraph2D*> mGainResolutionG2Dmap;
+    // std::map<G4double, TGraph2D*> mTransitTimeG2Dmap;
+    // std::map<G4double, TGraph2D*> mTransitTimeSpreadG2Dmap;
+
+    void fetchDataForInterpolation(const std::string& pFilePath, alglib::real_1d_array& pX, alglib::real_1d_array& pY, alglib::real_1d_array& pF); 
+    void buildSplineFromDataFile(const std::string& pFileName, std::map<double, alglib::spline2dinterpolant>& pMap, const double& pKey);
+    std::map<G4double, alglib::spline2dinterpolant> mGainG2Dmap;
+    std::map<G4double, alglib::spline2dinterpolant> mGainResolutionG2Dmap;
+    std::map<G4double, alglib::spline2dinterpolant> mTransitTimeG2Dmap;
+    std::map<G4double, alglib::spline2dinterpolant> mTransitTimeSpreadG2Dmap;
 
     G4double GetCharge(G4double pWavelengthKey);
     G4double GetCharge(G4double pWavelengthKey1, G4double pWavelengthKey2);
@@ -51,7 +60,7 @@ private:
     PMTPulse GetPulseFromInterpolation(G4double pWavelengthKey1, G4double pWavelengthKey2);
     PMTPulse GetPulseFromKey(G4double pWavelengthKey);
 
-    G4double WavelengthInterpolatedValue(std::map<G4double, TGraph2D*> pMap, G4double pWavelengthKey1, G4double pWavelengthKey2);
+    G4double WavelengthInterpolatedValue(std::map<G4double, alglib::spline2dinterpolant> pMap, G4double pWavelengthKey1, G4double pWavelengthKey2);
 
     OMSimPMTResponse();
     ~OMSimPMTResponse() = default;

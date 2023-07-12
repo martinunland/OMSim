@@ -83,6 +83,13 @@
         "netfwd": "cpp",
         "span": "cpp",
         "ntuple": "cpp",
-        "bmf": "cpp"
+        "bmf": "cpp",
+        "vec2": "cpp",
+        "vec2f": "cpp",
+        "vec3": "cpp",
+        "vec3f": "cpp",
+        "vec4": "cpp",
+        "vec4f": "cpp",
+        "base_leaf": "cpp"
     }
 }
